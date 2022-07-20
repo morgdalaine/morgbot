@@ -2,6 +2,7 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import { MessageEmbed } from 'discord.js';
 import { SlashCommand } from '../types';
 import { sheetCreateSubcommand, sheetDeleteSubcommand, sheetListSubcommand } from '../utils/sheets';
+import { getOrCreateUser } from '../utils/users';
 
 export const SheetCommand: SlashCommand = {
   command: new SlashCommandBuilder()
@@ -20,6 +21,14 @@ export const SheetCommand: SlashCommand = {
         )
     )
     .addSubcommand((subcommand) => subcommand.setName('list').setDescription('List user sheets'))
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName('set_active_sheet')
+        .setDescription('Set active sheet')
+        .addStringOption((option) =>
+          option.setName('name').setDescription('Sheet name').setRequired(true)
+        )
+    )
     .addSubcommand((subcommand) =>
       subcommand
         .setName('delete')
@@ -48,7 +57,10 @@ export const SheetCommand: SlashCommand = {
         break;
       }
       default: {
-        const embed = new MessageEmbed().setTitle('Subcommand failed to run').setColor('RED');
+        const embed = new MessageEmbed()
+          .setTitle(`Subcommand \`${subcommand}\` failed to run`)
+          .setDescription('Please consult the manual and try again')
+          .setColor('RED');
         await interaction.reply({
           embeds: [embed],
           ephemeral: true,

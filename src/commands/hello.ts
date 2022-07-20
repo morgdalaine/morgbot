@@ -1,5 +1,6 @@
 import { SlashCommandBuilder, userMention } from '@discordjs/builders';
 import { MessageActionRow, MessageSelectMenu } from 'discord.js';
+import { client } from '../main';
 import { SlashCommand } from '../types';
 
 export const HelloCommand: SlashCommand = {
@@ -9,8 +10,8 @@ export const HelloCommand: SlashCommand = {
       new MessageSelectMenu()
         .setCustomId('select')
         .setPlaceholder('Nothing selected')
-        .setMinValues(2)
-        .setMaxValues(3)
+        // .setMinValues(2)
+        // .setMaxValues(3)
         .addOptions([
           {
             label: 'Select me',
@@ -30,9 +31,18 @@ export const HelloCommand: SlashCommand = {
         ])
     );
 
+    const { channel } = interaction;
+    const message = await channel?.send({
+      components: [row],
+    });
+
+    const thing = message?.createMessageComponentCollector({});
+
+    // await message?.edit({ content: message. });
+
     await interaction.reply({
       content: `Hello ${userMention(interaction.user.id)}`,
-      components: [row],
+      // components: [thing],
     });
   },
 };

@@ -1,4 +1,4 @@
-import { CommandInteraction, MessageEmbed, User } from 'discord.js';
+import { CommandInteraction, MessageEmbed } from 'discord.js';
 import {
   addSheetToUser,
   deactivateSheetsByUser,
